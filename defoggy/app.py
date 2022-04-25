@@ -154,7 +154,7 @@ def dehaze_image(img):
     input_image = np.pad(input_image_orig,((7,8), (7,8), (0,0)),'symmetric') 
 
     model = TransmissionModel(input_image.shape)
-    model.load_weights('/content/defoggy.ai/defoggy/transmodel_weights.h5')
+    model.load_weights('/content/Defoggy.ai/defoggy/transmodel_weights.h5')
 
     input_image = np.expand_dims(input_image, axis=0)
     trans_map_orig = model.predict(input_image)
@@ -164,7 +164,7 @@ def dehaze_image(img):
     res_map_input = input_image_orig/np.expand_dims(trans_map_refine, axis=(0,3))
 
     model = ResidualModel(res_map_input.shape[1:])
-    model.load_weights('/content/defoggy.ai/defoggy/resmodel_weights.h5')
+    model.load_weights('/content/Defoggy.ai/defoggy/resmodel_weights.h5')
     res_map_output = model.predict(np.clip(res_map_input,0,1))
 
     haze_free_image = (res_map_input-res_map_output)
@@ -191,14 +191,14 @@ def predict():
         out = dehaze_image(img)
         print(out.max(),out.min())
         print("hello world5")
-        Image.fromarray((out*255).astype(np.uint8)).save("/content/defoggy.ai/defoggy/static/output.jpg")
+        Image.fromarray((out*255).astype(np.uint8)).save("/content/Defoggy.ai/defoggy/static/output.jpg")
         # Serialize the result, you can add additional fields
         return "<h1>Calculated</h1>"
     return None
 
 @app.route('/show', methods=['GET'])
 def show():
-  if(os.path.exists('/content/defoggy.ai/defoggy/static/output.jpg')):
+  if(os.path.exists('/content/Defoggy.ai/defoggy/static/output.jpg')):
     print("adslalknsdal")
     return render_template('show.html',filename='/static/output.jpg')
   else:
